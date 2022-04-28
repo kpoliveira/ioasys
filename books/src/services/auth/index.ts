@@ -4,8 +4,7 @@ import {User, ResponseUser, UserRefresh} from '../auth/types'
 
 export const signIn = async ({
     email, password
-}:User): Promise<ResponseUser> => {
-    console.log('ta aqui')
+}:User): Promise<ResponseUser | number> => {
     const body: User = {
         email: email,
         password: password
@@ -19,7 +18,11 @@ export const signIn = async ({
 
     data['authorization'] = authorization;
     data['refresh-token'] = refresh;
-    return data;
+    if(status == 200){
+        return data;
+    }else{
+        return 400;
+    }
 }
 
 export const refreshToken = async ({

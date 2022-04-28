@@ -21,11 +21,17 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import {signIn} from './src/services/auth';
+import AuthScreen from './src/screens/AuthScreen/index';
+import BookList from './src/screens/BookList/index';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import BookDetails from './src/screens/BookDetails';
 
 const App = () => {
   const [user, setUser] = useState({});
   const isDarkMode = useColorScheme() === 'dark';
   const image = {uri: './assets/background.png'};
+  const Stack = createNativeStackNavigator();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -45,25 +51,15 @@ const App = () => {
   };
 
   return (
-    <View style={styles.viewStyle}>
-      <ImageBackground
-        source={require('./src/assets/background.png')}
-        resizeMode={'cover'}
-        style={{height: '100%'}}>
-        <View style={styles.centerItems}>
-          <View style={styles.firstTitleRow}>
-            <Image source={require('./src/assets/ioasys.png')} />
-            <Text style={styles.booksText}>Books</Text>
-          </View>
-          <TouchableOpacity
-            onPress={async () => {
-              handleAuth('desafio@ioasys.com.br', '12341234');
-            }}>
-            <Text>Teste</Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName="AuthScreen">
+        <Stack.Screen name="AuthScreen" component={AuthScreen} />
+        <Stack.Screen name="BookList" component={BookList} />
+        <Stack.Screen name="BookDetails" component={BookDetails} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
@@ -79,15 +75,15 @@ const styles = StyleSheet.create({
     // alignItems: 'center'
     padding: '16%',
   },
-  booksText:{
+  booksText: {
     fontSize: 35,
     paddingLeft: '4%',
-    color: 'white'
+    color: 'white',
   },
   firstTitleRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
 });
 
