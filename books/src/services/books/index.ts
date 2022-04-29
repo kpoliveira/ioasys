@@ -9,12 +9,6 @@ export const books = async ({
     let url = `/books?page=${page}&amount=${amount}`
     if(title != '') url += `&title=${title}`
     if(category != '') url += `&category=${category}`
-    console.log('auqi', url)
-    console.log('page', page)
-    console.log('amount', amount)
-    console.log('title', title)
-    console.log('category', category)
-    console.log('auth', auth)
     const {status, data} = await ioasysApi.get(url, {
         headers: {Authorization: `Bearer ${auth}`}
     });

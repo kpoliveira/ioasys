@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ioasysApi } from "../api";
 import {User, ResponseUser, UserRefresh} from '../auth/types'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const signIn = async ({
     email, password
@@ -17,7 +18,7 @@ export const signIn = async ({
     const refresh = headers['refresh-token'];
 
     data['authorization'] = authorization;
-    data['refresh-token'] = refresh;
+    data['refreshToken'] = refresh;
     if(status == 200){
         return data;
     }else{
@@ -25,19 +26,23 @@ export const signIn = async ({
     }
 }
 
-export const refreshToken = async ({
-    refreshToken
-}:UserRefresh): Promise<any> => {
-    const body: UserRefresh = {
-        refreshToken: refreshToken,
+export const refreshToken = async (): Promise<any> => {
+    const value = await AsyncStorage.getItem('@user')
+    if(value != null){
+        const validValue = JSON.parse(value)
+        const body: UserRefresh = {
+            refreshToken: validValue.refreshToken,
+        }
+    
+        const url = '/auth/refresh-token'
+        const {status, headers} = await ioasysApi.post(url, body)
+        
+        const authorization = headers['authorization'];
+        const refresh = headers['refresh-token'];
+        let data = {
+            authorization,
+            refresh
+        }
+        return data;
     }
-
-    const url = '/auth/refresh-token'
-    const {status, data, headers} = await ioasysApi.post(url, body)
-
-    const authorization = headers['authorization'];
-    const refresh = headers['refresh-token'];
-    data['authorization'] = authorization;
-    data['refresh-token'] = refresh;
-    return data;
 }

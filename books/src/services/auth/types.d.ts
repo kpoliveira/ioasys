@@ -4,12 +4,13 @@ export interface User {
 }
 
 export interface ResponseUser{
-    name: string;
-    email: string;
-    birthdate: string;
-    gender: string;
-    id: string;
+    name?: string;
+    email?: string;
+    birthdate?: string;
+    gender?: string;
+    id?: string;
     authorization?: string
+    refreshToken?: string;
 }
 
 export interface UserRefresh{

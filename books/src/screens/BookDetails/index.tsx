@@ -24,11 +24,13 @@ import {
 import {signIn} from '../../../src/services/auth';
 import {books, booksId} from '../../services/books';
 import Svg, {Path, Circle} from 'react-native-svg';
+import {useNavigation} from '@react-navigation/native';
 
 const BookDetails = (props: any) => {
   const [booksState, setBooks] = useState<any>([]);
   const isDarkMode = useColorScheme() === 'dark';
   const image = {uri: './assets/background.png'};
+  const nav = useNavigation();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -38,9 +40,7 @@ const BookDetails = (props: any) => {
     fetch(props.route.params.id, props.route.params.auth);
   }, []);
 
-  useEffect(() => {
-    console.log('BOOKS: ', booksState?.authors);
-  }, [booksState]);
+  useEffect(() => {}, [booksState]);
 
   const SvgComponent = (props: any) => (
     <Svg width={32} height={32} fill="none" {...props}>
@@ -67,7 +67,12 @@ const BookDetails = (props: any) => {
 
   return (
     <View style={styles.viewStyle}>
-      <SvgComponent />
+      <TouchableOpacity
+        onPress={() => {
+          nav.goBack();
+        }}>
+        <SvgComponent />
+      </TouchableOpacity>
       <View
         style={{
           flex: 1,
@@ -90,7 +95,8 @@ const BookDetails = (props: any) => {
               {booksState?.authors[0]}, {booksState?.authors[1]}
             </Text>
           ) : (
-            <Text>{booksState?.authos[0]}</Text>
+            <Text>{booksState?.authors}</Text>
+            // <View />
           )}
         </View>
 
